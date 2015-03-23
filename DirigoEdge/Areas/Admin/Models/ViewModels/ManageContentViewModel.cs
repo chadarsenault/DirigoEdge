@@ -18,6 +18,7 @@ namespace DirigoEdge.Areas.Admin.Models.ViewModels
         public string Sort = "";
 
         public List<ContentPage> Pages;
+        public List<Schema> Schemata; 
         public Boolean UseTemplateSelector = true;
         public List<PageTemplate> Templates = new List<PageTemplate>();
 
@@ -29,6 +30,7 @@ namespace DirigoEdge.Areas.Admin.Models.ViewModels
         {
             // Add any Schema Id's here that you don't want to be listed on this manage page
             var excludeSchemas = new List<int> { 1, 3 };
+            Schemata = Context.Schemas.OrderBy(x => x.DisplayName).ToList();
 
             foreach (var view in templateViews)
             {
@@ -63,6 +65,8 @@ namespace DirigoEdge.Areas.Admin.Models.ViewModels
 
             // Grab the formatted nav list for the category drop down
             NavList = NavigationUtils.GetNavList();
+
+            Schemata = new List<Schema>();
         }
 
         public class PageTemplate

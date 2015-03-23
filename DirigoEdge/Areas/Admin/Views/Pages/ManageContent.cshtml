@@ -36,6 +36,20 @@
                             }
                         }
                         <th>Title</th>
+                        @if (Model.SchemaId < 0)
+                        {
+                            <th class="schemas">
+                                <select class="schemaFilter">
+                                    <option value="">All Schemas</option>
+                                    @{
+                                        foreach (var item in Model.Schemata)
+                                        {
+                                            <option value="@item.DisplayName" data-name="@item.DisplayName">@item.DisplayName</option>
+                                        }
+                                    }
+                                </select>
+                            </th>
+                        }
                         <th class="hidden-xs">Created</th>
                         <th class="hidden-xs">Status</th>
                         <th class="actions">Actions</th>
@@ -46,6 +60,8 @@
                         int sort = 1;
                         foreach (var page in Model.Pages)
                         {
+                            var schema = Model.Schemata.FirstOrDefault(x => x.SchemaId == page.SchemaId);
+                            var displayName = schema != null ? schema.DisplayName : "";
                             int? val = page.SortOrder;
                             int sortOrder = val != 0 ? page.SortOrder : sort;
                             ++sort;
@@ -71,10 +87,14 @@
                             }
                             }
                             <td class="title"><a href="@codeEditUrl">@page.Title</a></td>
+                            @if (Model.SchemaId < 0)
+                            {
+                                <td class="schema">@displayName</td>
+                            }
                             <td class="hidden-xs">@Convert.ToDateTime(page.CreateDate).ToString("MM/dd/yyyy")</td>
 
                             @{
-                            string published = Convert.ToBoolean(page.IsActive) ? "Published" : "Draft";
+                                string published = Convert.ToBoolean(page.IsActive) ? "Published" : "Draft";
                             }
 
                             <td class="hidden-xs">@published</td>
@@ -82,19 +102,17 @@
                             <td>
                                 <a class="delete btn btn-danger btn-sm" href="javascript:void(0);" data-id="@page.ContentPageId">Delete</a>
                                 @{
-                            string url = "/" + page.Permalink + "/";
+                                    string url = "/" + page.Permalink + "/";
                                 }
                                 <a class="btn btn-info btn-sm" href="@url" target=_blank>Preview</a>
-
-                                @{
-                            // Don't show WYSIWYG for schema editors
-                            if (!hasSchema)
-                            {
-                                    <a class="btn btn-primary btn-sm" href="@Url.Action("EditContentBasic", "Pages", new { id = @page.ContentPageId })">WYSIWYG Edit</a>
-                            }
-                                }
-
                                 <a class="btn btn-primary btn-sm" href="@codeEditUrl">Code Edit { }</a>
+                                @{
+                                    // Don't show WYSIWYG for schema editors
+                                    if (!hasSchema && page.SchemaId == null)
+                                    {
+                                        <a class="btn btn-primary btn-sm" href="@Url.Action("EditContentBasic", "Pages", new { id = @page.ContentPageId })">WYSIWYG Edit</a>
+                                    }
+                                }
                             </td>
                         </tr>
                         }
@@ -242,9 +260,18 @@
                         $("table.manageTable").dataTable({
                             "iDisplayLength": 25,
                             "aoColumnDefs": [
-                                { "bSortable": false, "aTargets": ["actions"] } // No Sorting on actions
+                                { "bSortable": false, "aTargets": ["actions", "schemas"] } // No Sorting on actions
                             ],
                             "aaSorting": [[0, "asc"]] // Sort by Created Date on page load
+                        });
+
+                        $('select.schemaFilter').change(function (e) {
+                            e.preventDefault();
+
+                            var search = $('select.schemaFilter option:selected').val();
+
+                            $('.dataTables_filter input').val(search).keyup();
+
                         });
                     }
 
