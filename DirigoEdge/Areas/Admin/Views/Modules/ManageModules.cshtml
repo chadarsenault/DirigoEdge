@@ -16,6 +16,17 @@
                     <thead>
                         <tr>
                             <th>Name</th>
+                            <th class="schemas">
+                                <select class="schemaFilter">
+                                    <option value="">All Schemas</option>
+                                    @{
+                                        foreach (var item in Model.Schemata)
+                                        {
+                                            <option value="@item.DisplayName" data-name="@item.DisplayName">@item.DisplayName</option>
+                                        }
+                                    }
+                                </select>
+                            </th>
                             <th class="hidden-xs">Created</th>
                             <th class="actions">Actions</th>
                         </tr>
@@ -24,19 +35,22 @@
                         @{
                             foreach (var module in Model.Modules)
                             {
-                            <tr>
-                                <td class="title"><a href="@Url.Action("EditModule", "Modules", new { id = @module.ContentModuleId })">@module.ModuleName</a></td>
-                                <td class="hidden-xs">@Convert.ToDateTime(module.CreateDate).ToString("MM/dd/yyyy")</td>
-                                <td>
-                                    <div class="">
-                                        <a class="delete btn btn-danger btn-sm mobileMarginBottom" href="javascript:void(0);" data-id="@module.ContentModuleId">Delete</a>
-                                        <a class="hide btn btn-sm mobileTop" href="@Url.Action("EditModule", "Modules", new { id = @module.ContentModuleId })" >Basic Edit</a>
-                                        <a class="btn btn-sm btn-warning" href="@Url.Action("CloneModule", "Modules", new { id = @module.ContentModuleId })"><i class="fa fa-copy"></i> Clone</a>
-                                          <a class="btn btn-primary btn-sm" href="@Url.Action("EditModuleBasic", "Modules", new { id = @module.ContentModuleId })">WYSIWYG Edit</a>
-                                        <a class="btn btn-primary btn-sm mobileTop" href="@Url.Action("EditModule", "Modules", new { id = @module.ContentModuleId })" >Code Edit <span class="hidden-xs">{ }</span></a>
-                                    </div>
-                                </td>
-                            </tr>
+                                var schema = Model.Schemata.FirstOrDefault(x => x.SchemaId == module.SchemaId);
+                                var displayName = schema != null ? schema.DisplayName : "";
+                                <tr>
+                                    <td class="title"><a href="@Url.Action("EditModule", "Modules", new { id = @module.ContentModuleId })">@module.ModuleName</a></td>
+                                    <td class="schema">@displayName</td>
+                                    <td class="hidden-xs">@Convert.ToDateTime(module.CreateDate).ToString("MM/dd/yyyy")</td>
+                                    <td>
+                                        <div class="">
+                                            <a class="delete btn btn-danger btn-sm mobileMarginBottom" href="javascript:void(0);" data-id="@module.ContentModuleId">Delete</a>
+                                            <a class="hide btn btn-sm mobileTop" href="@Url.Action("EditModule", "Modules", new { id = @module.ContentModuleId })" >Basic Edit</a>
+                                            <a class="btn btn-sm btn-warning" href="@Url.Action("CloneModule", "Modules", new { id = @module.ContentModuleId })"><i class="fa fa-copy"></i> Clone</a>
+                                              <a class="btn btn-primary btn-sm" href="@Url.Action("EditModuleBasic", "Modules", new { id = @module.ContentModuleId })">WYSIWYG Edit</a>
+                                            <a class="btn btn-primary btn-sm mobileTop" href="@Url.Action("EditModule", "Modules", new { id = @module.ContentModuleId })" >Code Edit <span class="hidden-xs">{ }</span></a>
+                                        </div>
+                                    </td>
+                                </tr>
                             }
                         }
                     </tbody>
@@ -84,9 +98,18 @@
                 $("table.manageTable").dataTable({
                     "iDisplayLength": 25,
                     "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": ["actions"] } // No Sorting on actions
+                        { "bSortable": false, "aTargets": ["actions", "schemas"] } // No Sorting on actions
                     ],
                     "aaSorting": [[0, "asc"]] // Sort by module name on load
+                });
+
+                $('select.schemaFilter').change(function (e) {
+                    e.preventDefault();
+
+                    var search = $('select.schemaFilter option:selected').val();
+
+                    $('.dataTables_filter input').val(search).keyup();
+
                 });
             });
         </script>
