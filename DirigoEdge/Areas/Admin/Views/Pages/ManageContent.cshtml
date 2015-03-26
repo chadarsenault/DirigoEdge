@@ -108,7 +108,7 @@
                                 <a class="btn btn-primary btn-sm" href="@codeEditUrl">Code Edit { }</a>
                                 @{
                                     // Don't show WYSIWYG for schema editors
-                                    if (!hasSchema && page.SchemaId == null)
+                                    if (page.SchemaId == null || page.SchemaId == -1)
                                     {
                                         <a class="btn btn-primary btn-sm" href="@Url.Action("EditContentBasic", "Pages", new { id = @page.ContentPageId })">WYSIWYG Edit</a>
                                     }

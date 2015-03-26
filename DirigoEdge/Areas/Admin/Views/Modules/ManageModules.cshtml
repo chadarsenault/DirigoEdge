@@ -46,8 +46,14 @@
                                             <a class="delete btn btn-danger btn-sm mobileMarginBottom" href="javascript:void(0);" data-id="@module.ContentModuleId">Delete</a>
                                             <a class="hide btn btn-sm mobileTop" href="@Url.Action("EditModule", "Modules", new { id = @module.ContentModuleId })" >Basic Edit</a>
                                             <a class="btn btn-sm btn-warning" href="@Url.Action("CloneModule", "Modules", new { id = @module.ContentModuleId })"><i class="fa fa-copy"></i> Clone</a>
-                                              <a class="btn btn-primary btn-sm" href="@Url.Action("EditModuleBasic", "Modules", new { id = @module.ContentModuleId })">WYSIWYG Edit</a>
                                             <a class="btn btn-primary btn-sm mobileTop" href="@Url.Action("EditModule", "Modules", new { id = @module.ContentModuleId })" >Code Edit <span class="hidden-xs">{ }</span></a>
+                                            @{
+                                                // Don't show WYSIWYG for schema editors
+                                                if (module.SchemaId == null || module.SchemaId == -1)
+                                                {
+                                                    <a class="btn btn-primary btn-sm" href="@Url.Action("EditModuleBasic", "Modules", new { id = @module.ContentModuleId })">WYSIWYG Edit</a>
+                                                }
+                                            }
                                         </div>
                                     </td>
                                 </tr>
