@@ -13,12 +13,10 @@
             <article data-id="@post.BlogId">
                 @* Blog Author *@
                 @{
-                    var relatedUser = "Anonymous";
                     var relatedAuthorUrl = "#";
                     var image = "/Content/StockFeaturedImages/recordsPlayer.jpg";
                     if (post.Author != "")
                     {
-                        relatedUser = post.Author;
                         relatedAuthorUrl = post.BlogAuthorUrl ?? "#";
                     }
                     if (post.ImageUrl != "")
@@ -26,14 +24,14 @@
                         image = post.ImageUrl;
                     }
                 }
-                <h5><a href="/blog/@ContentUtils.GetFormattedUrl(post.MainCategory)/@post.PermaLink">@post.Title</a></h5>
+                <h5><a href="/blog/@post.Category.CategoryNameFormatted/@post.PermaLink">@post.Title</a></h5>
                 <div class="relatedPostImage">
                     <p>
                         <img class="img-responsive" src="@image" alt="Related Blog Image"/>    
                     </p>
                 </div>
                 <p>
-                    Written by <a href="@relatedAuthorUrl">@relatedUser</a>
+                    Written by <a href="@relatedAuthorUrl"> @post.BlogAuthor.DisplayName</a>
                     <span class="dateLine">@post.Date.ToLongDateString()</span>
                 </p>
     

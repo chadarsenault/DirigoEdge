@@ -7,7 +7,7 @@
         @{
             foreach (var user in Model.BlogUsers)
             {
-                string selected = user.UserId == Model.ThisBlog.AuthorId ? "selected=\"selected\"" : "";
+                var selected = user.UserId == Model.ThisBlog.BlogAuthor.UserId ? "selected=\"selected\"" : "";
                 <option data-id="@user.UserId" @selected>@user.DisplayName</option>		
             }
         }

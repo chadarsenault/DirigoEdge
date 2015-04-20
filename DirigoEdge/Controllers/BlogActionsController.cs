@@ -80,7 +80,7 @@ namespace DirigoEdge.Controllers
             var result = new JsonResult();
             List<Blog> blogs = model.GetMoreRelatedBlogs(take, skip, category, id);
             string html = ContentUtils.RenderPartialViewToString("/Views/Shared/Partials/RelatedBlogSinglePartial.cshtml", blogs, ControllerContext, ViewData, TempData);
-            result.Data = new { html = html, skip = skip + take, buttonClass = blogs.Count() < take ? "hide" : "" };
+            result.Data = new {html, skip = skip + take, buttonClass = blogs.Count() < take ? "hide" : "" };
             return result;
         }
 

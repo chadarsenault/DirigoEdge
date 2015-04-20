@@ -1,11 +1,12 @@
 ﻿@{
     ViewBag.Title = "Blogs by Tag";
 }
+@using DirigoEdgeCore.Data.Entities
 @using DirigoEdgeCore.Utils
 @model DirigoEdgeCore.Models.ViewModels.TagSingleViewModel
 
 <div class="row module blogCatListing">
-    
+
     @*BreadCrumbs*@
     <div class="col-lg-12 breadcrumbContainer">
         <ul class="breadcrumbs">
@@ -18,7 +19,7 @@
     <div class="col-lg-8">
         <div class="stripe darkBlue"></div>
         <h1 class="title sansserif light">@Model.TheTag</h1>
-        
+
         @{
             if (Model.BlogRoll.Count == 0)
             {
@@ -29,9 +30,10 @@
         @{
             foreach (var blog in Model.BlogRoll)
             {
+                
                 <article>
-                    <h2><a href="/blog/@ContentUtils.GetFormattedUrl(blog.MainCategory)/@ContentUtils.GetFormattedUrl(blog.PermaLink)/">@blog.Title</a></h2>
-                    <h6>Written by <a href="@blog.BlogAuthorUrl">@blog.Author</a> on @blog.Date.ToLongDateString()</h6>
+                    <h2><a href="/blog/@blog.Category.CategoryNameFormatted/@ContentUtils.GetFormattedUrl(blog.PermaLink)/">@blog.Title</a></h2>
+                    <h6>Written by <a href="@blog.BlogAuthorUrl">@blog.BlogAuthor.DisplayName</a> on @blog.Date.ToLongDateString()</h6>
 
                     <div class="row">
                         <div class="userBlogContent col-lg-12">
@@ -54,21 +56,18 @@
                 else
                 {
                     <ul class="side-nav">
-                        @{
-                            foreach (var cat in Model.Categories)
-                            {
-                                string catName = cat.TheCategory.CategoryName;
-                            
-                                <li>
-                                    <a href="/blog/@ContentUtils.GetFormattedUrl(catName)/">@catName (@cat.BlogCount)</a>
-                                </li>
-                            }
-                        }
+                     
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <li>
+                            <a href="/blog/@cat.TheCategory.CategoryNameFormatted/">@cat.TheCategory.CategoryName (@cat.BlogCount)</a>
+                        </li>
+                    }
                     </ul>
                 }
             }
         </div>
-        
+
     </div>
 
 </div>

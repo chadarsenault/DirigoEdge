@@ -7,12 +7,20 @@ using DirigoEdge.Areas.Admin.Models;
 using DirigoEdge.Controllers;
 using DirigoEdgeCore.Controllers;
 using DirigoEdgeCore.Data.Entities;
+using DirigoEdgeCore.Utils;
 using WebGrease.Css.Extensions;
 
 namespace DirigoEdge.Areas.Admin.Controllers
 {
     public class CategoryController : DirigoBaseAdminController
     {
+        private BlogUtils utils;
+
+        public CategoryController()
+        {
+            utils = new BlogUtils(Context);
+        }
+
         [HttpPost]
         [PermissionsFilter(Permissions = "Can Edit Blog Categories")]
         [AcceptVerbs(HttpVerbs.Post)]
@@ -36,7 +44,8 @@ namespace DirigoEdge.Areas.Admin.Controllers
                 {
                     CategoryName = name,
                     CreateDate = DateTime.UtcNow,
-                    IsActive = true
+                    IsActive = true,
+                    CategoryNameFormatted = ContentUtils.FormatCategory(name)
                 };
 
                 Context.BlogCategories.Add(newCategory);
@@ -76,17 +85,23 @@ namespace DirigoEdge.Areas.Admin.Controllers
                 int catId = Int32.Parse(id);
 
                 var cat = Context.BlogCategories.FirstOrDefault(x => x.CategoryId == catId);
+                var uncat = utils.GetUncategorizedCategory();
+                Context.SaveChanges();
 
                 // did we find a category
                 if (cat != null)
                 {
-                    // find all posts with this category and change to General category
-                    Context.Blogs.Where(x => x.MainCategory == cat.CategoryName).ForEach(x => x.MainCategory = "General");
-                }
-                Context.BlogCategories.Remove(cat);
-                success = Context.SaveChanges();
+                    // find all posts with this category and change to Uncategorized
+                    foreach (var x in Context.Blogs.Where(x => x.Category.CategoryName == cat.CategoryName))
+                    {
+                        x.Category = uncat;
+                    }
 
+                    Context.BlogCategories.Remove(cat);
+                    success = Context.SaveChanges();
+                }
             }
+
             if (success > 0)
             {
                 result.Data = new

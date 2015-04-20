@@ -21,12 +21,12 @@
                     <a href="/blog/">Blog</a>
                 </li>
                 <li>
-                    <a href="/blog/@ContentUtils.GetFormattedUrl(Model.TheBlog.MainCategory)/">
-                        @Model.TheBlog.MainCategory
+                    <a href="/blog/@Model.TheBlog.Category.CategoryNameFormatted/">
+                        @Model.TheBlog.Category.CategoryName
                     </a>
                 </li>
                 <li class="active">
-                    <a href="/blog/@ContentUtils.GetFormattedUrl(Model.TheBlog.MainCategory)/@Model.TheBlog.PermaLink">@Model.TheBlog.Title</a>
+                    <a href="/blog/@Model.TheBlog.Category.CategoryNameFormatted/@Model.TheBlog.PermaLink">@Model.TheBlog.Title</a>
                 </li>
             </ol>
         </div>
@@ -46,16 +46,14 @@
             <article>
                 @* Blog Author *@
                 @{
-                    var user = "Anonymous";
                     var authorUrl = "#";
                     if (Model.TheBlogUser != null)
                     {
-                        user = Model.TheBlogUser.Username;
                         authorUrl = Model.TheBlog.BlogAuthorUrl ?? "#";
                     }
                 }
-                <h3><a href="/blog/@Model.TheBlog.PermaLink">@Model.TheBlog.Title</a></h3>
-                <h6>Written by <a href="@authorUrl">@user</a> on @Model.TheBlog.Date.ToLongDateString()</h6>
+                <h3><a href="/blog/@Model.TheBlog.Category.CategoryName/@Model.TheBlog.PermaLink">@Model.TheBlog.Title</a></h3>
+                <h6>Written by <a href="@authorUrl">@Model.TheBlog.BlogAuthor.DisplayName</a> on @Model.TheBlog.Date.ToLongDateString()</h6>
                 
                 @{
                     if (!String.IsNullOrEmpty(Model.TheBlog.ImageUrl))
@@ -81,15 +79,10 @@
             
             @{
                 // Category Display
-                if (!String.IsNullOrEmpty(Model.TheBlog.MainCategory))
-                {
                     <div class="categories">
-                        @{
-                            string catLink = Model.TheBlog.MainCategory.ToLower();
-                        }
-                        <p>Category : <a href="/blog/@ContentUtils.GetFormattedUrl(catLink)/">@Model.TheBlog.MainCategory</a></p>
+                       
+                        <p>Category : <a href="/blog/@Model.TheBlog.Category.CategoryNameFormatted/">@Model.TheBlog.Category.CategoryName</a></p>
                     </div>
-                }
             }
             
             @{
@@ -172,7 +165,7 @@
             @Html.Partial("~/Views/Shared/Partials/BlogAuthorPartial.cshtml", Model.BlogAuthorModel)
             
             @* Categories *@
-            @Html.Partial("~/Views/Shared/Partials/CategoriesListingPartial.cshtml", new BlogsCategoriesViewModel(Model.TheBlog.MainCategory))
+            @Html.Partial("~/Views/Shared/Partials/CategoriesListingPartial.cshtml", new BlogsCategoriesViewModel(Model.TheBlog.Category.CategoryName))
             
             @* Latest Blogs / Popular *@
             @Html.Partial("~/Views/Shared/Partials/PopularBlogsPartial.cshtml", new BlogPopularViewModel())

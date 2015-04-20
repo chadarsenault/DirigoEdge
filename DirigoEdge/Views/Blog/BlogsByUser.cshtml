@@ -33,7 +33,7 @@
 
     <div class="col-lg-9 blogListing">
         
-        <h2>Blogs by : @Model.BlogUsername</h2>
+        <h2>Blogs by : @Model.TheBlog.BlogAuthor.DisplayName</h2>
 
         @{
             if (Model.BlogsByUser.Count < 1)

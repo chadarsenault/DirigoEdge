@@ -30,11 +30,12 @@ namespace DirigoEdge.Controllers
                 return View("~/Views/Home/Blog.cshtml", model);
             }
             // Category
-            else if (String.IsNullOrEmpty(title))
+            
+            if (String.IsNullOrEmpty(title))
             {
                 
                 // Category
-                var cats = Context.BlogCategories.ToList().Select(x => ContentUtils.GetFormattedUrl(x.CategoryName));
+                var cats = Context.BlogCategories.ToList().Select(x => ContentUtils.FormatCategory(x.CategoryName));
 
                 if (cats.Contains(category))
                 {

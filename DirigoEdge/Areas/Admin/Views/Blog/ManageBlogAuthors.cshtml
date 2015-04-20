@@ -37,7 +37,10 @@
                                 <td class="isActive">@active</td>
                                 <td>
                                     <a class="editUser btn btn-primary btn-sm" href="javascript:void(0);" data-id="@user.UserId">Edit</a>
-                                    <a class="deleteUser btn btn-danger btn-sm" href="javascript:void(0);" data-id="@user.UserId">Delete</a>
+                                    @if (user.UserId != 1)
+                                    {
+                                        <a class="deleteUser btn btn-danger btn-sm" href="javascript:void(0);" data-id="@user.UserId">Delete</a>
+                                    }
                                 </td>
                             </tr>
 					    }

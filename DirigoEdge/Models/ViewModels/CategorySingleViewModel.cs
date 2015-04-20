@@ -35,7 +35,7 @@ namespace DirigoEdgeCore.Models.ViewModels
             category = formatCategoryString(category);
 
 
-            AllBlogsInCategory = Context.Blogs.Where(x => x.MainCategory.ToLower() == category && x.IsActive)
+            AllBlogsInCategory = Context.Blogs.Where(x => x.Category.CategoryNameFormatted == category && x.IsActive)
                         .OrderByDescending(blog => blog.Date)
                         .ToList();
 
@@ -44,7 +44,7 @@ namespace DirigoEdgeCore.Models.ViewModels
                 .ToList();
 
 
-            TheCategory = Context.BlogCategories.FirstOrDefault(x => x.CategoryName.ToLower() == category);
+            TheCategory = Context.BlogCategories.FirstOrDefault(x => x.CategoryNameFormatted == category);
             var model = new BlogListModel(Context);
             MaxBlogCount = model.GetBlogSettings().MaxBlogsOnHomepageBeforeLoad;
             SkipBlogs = MaxBlogCount;

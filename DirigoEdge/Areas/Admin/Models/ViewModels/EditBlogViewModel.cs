@@ -27,11 +27,17 @@ namespace DirigoEdge.Areas.Admin.Models.ViewModels
 
         public EditBlogViewModel(string blogId)
         {
+            var utils = new BlogUtils(Context);
             BlogId = Int32.Parse(blogId);
             _memUser = Membership.GetUser(HttpContext.Current.User.Identity.Name);
             SiteUrl = HTTPUtils.GetFullyQualifiedApplicationPath() + "blog/";
 
             ThisBlog = Context.Blogs.FirstOrDefault(x => x.BlogId == BlogId);
+
+            if (ThisBlog.Category == null)
+            {
+                ThisBlog.Category = utils.GetUncategorizedCategory();
+            }
 
             // Make sure we have a permalink set
             if (String.IsNullOrEmpty(ThisBlog.PermaLink))
@@ -50,12 +56,17 @@ namespace DirigoEdge.Areas.Admin.Models.ViewModels
             _thisUser = Context.Users.FirstOrDefault(x => x.Username == _memUser.UserName);
 
             // Get and parse tags for unqiue count
-            var tagList = Context.Blogs.Select(x => x.Tags).ToList();
+             var tagList = Context.Blogs.Select(x => x.Tags).ToList();
             var tagStr = String.Join(",", tagList);
             var tags = tagStr.Split(',').Select(x => x.Trim()).ToList();
 
+            TagCounts = new List<TagMetric>();
 
-            TagCounts = tags.GroupBy(x => x).Where(x => !String.IsNullOrEmpty(x.Key)).Select(group => new TagMetric() { Tag = group.Key, Count = group.Count() }).OrderByDescending(x => x.Count).ToList();
+            TagCounts = Context.BlogTags.Select(t => new TagMetric()
+            {
+                Tag = t.BlogTagName,
+                Count = t.Blogs.Count()
+            }).ToList();
 
             BookmarkTitle = ThisBlog.Title;
 

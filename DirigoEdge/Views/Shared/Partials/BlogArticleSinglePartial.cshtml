@@ -1,20 +1,15 @@
 ﻿@using DirigoEdgeCore.Utils
 @{
-
-    int count = 0;
     foreach (var blog in Model)
     {
-        string tags = blog.Tags + "," + blog.MainCategory;
-        count++;
+        string tags = blog.Tags + "," + blog.Category.CategoryName;
 
         <article class="blogArticle blog col-lg-12" data-id="@blog.BlogId" data-tags="@tags.ToLower()">
 
             @{
-                var blogAuthor = "Anonymous";
                 var blogAuthorUrl = "#";
                 if (blog.Author != "")
                 {
-                    blogAuthor = blog.Author;
                     blogAuthorUrl = blog.BlogAuthorUrl + "/" ?? "#";
                 }
                 if (!String.IsNullOrEmpty(blog.ImageUrl))
@@ -33,13 +28,13 @@
          
             }
             <h4>
-                <a href="/blog/@ContentUtils.GetFormattedUrl(blog.MainCategory)/@blog.PermaLink">@blog.Title</a>
+                <a href="/blog/@blog.Category.CategoryNameFormatted/@blog.PermaLink">@blog.Title</a>
             </h4>
             
             @{
-                string inCategoryLanguage = String.IsNullOrEmpty(blog.MainCategory) ? "" : " in <a class='categoryLink' href='/blog/" + ContentUtils.GetFormattedUrl(blog.MainCategory) + "'/>" + blog.MainCategory + "</a>";
+        string inCategoryLanguage = String.IsNullOrEmpty(blog.Category.CategoryName) ? "" : " in <a class='categoryLink' href='/blog/" + blog.Category.CategoryNameFormatted + "'/>" + blog.Category.CategoryName + "</a>";
             }
-            <p class="byLine">Written by <a href="@blogAuthorUrl">@blogAuthor</a>@Html.Raw(inCategoryLanguage)</p>
+            <p class="byLine">Written by <a href="@blogAuthorUrl">@blog.BlogAuthor.DisplayName</a>@Html.Raw(inCategoryLanguage)</p>
             <p class="dateLine">@blog.Date.ToLongDateString()</p>
             
             <div class="row">

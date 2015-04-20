@@ -47,8 +47,7 @@ namespace DirigoEdgeCore.Models.ViewModels
             // Get User based on authorid
             TheBlogUser = Context.BlogUsers.FirstOrDefault(x => x.UserId == TheBlog.AuthorId);
 
-            string username = TheBlogUser != null ? TheBlogUser.DisplayName : "Anonymous";
-            BlogAuthorModel = new BlogAuthorViewModel(username);
+            BlogAuthorModel = new BlogAuthorViewModel(TheBlog.BlogAuthor.Username);
 
             // Facebook Like button
             ShowFacebookLikeButton = SettingsUtils.ShowFbLikeButton();
@@ -67,15 +66,22 @@ namespace DirigoEdgeCore.Models.ViewModels
             }
 
             // Tag Listing
-            Tags = TheBlog.Tags.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+
+
+            Tags = new List<string>();
+            foreach (var tag in TheBlog.Tags)
+            {
+                Tags.Add(tag.BlogTagName);
+            }
 
             // Full Category Listing
             Categories = new List<BlogsCategoriesViewModel.BlogCatExtraData>();
 
-            var cats = Context.BlogCategories.Where(x => x.IsActive == true).ToList();
+            var cats = Context.BlogCategories.Where(x => x.IsActive).ToList();
             foreach (var cat in cats)
             {
-                int count = Context.Blogs.Count(x => x.MainCategory == cat.CategoryName);
+                int count = Context.Blogs.Count(x => x.Category.CategoryId == cat.CategoryId);
                 Categories.Add(new BlogsCategoriesViewModel.BlogCatExtraData() { TheCategory = cat, BlogCount = count });
             }
         }

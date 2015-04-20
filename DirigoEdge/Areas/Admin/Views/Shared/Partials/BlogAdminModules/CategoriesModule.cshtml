@@ -2,40 +2,13 @@
 
 <h4>Category</h4>
 
-<div class="content container-fluid">
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#simpleContained1Tab" data-toggle="tab">All</a></li>
-    </ul>
-
-    <ul class="tab-content list-unstyled">
-        @{
-            if (Model.Categories.Any())
-            {
-                <li class="active catListing" id="simpleContained1Tab">
-                    <form class="custom">
-                        @{
-                             int count = 0;
-                             foreach (var cat in Model.Categories)
-                             {
-                                 count++;
-                                 string inputId = "catCheckbox" + count;
-                                 bool isChecked = Model.ThisBlog.MainCategory == cat.CategoryName;
-                                 string catChecked = isChecked ? "checked" : "";
-                                 string catCheckInput = isChecked ? "checked=checked" : "";
-
-                                 <label class="col-lg-3" for="@inputId">
-                                     <input name="catGroup" value="@cat.CategoryName" type="radio" id="@inputId" @catCheckInput autocomplete=off>
-                                     @cat.CategoryName
-                                 </label>
-                             }
-                        }
-                    </form>
-                </li>
-            }
-            else
-            {
-                <li class="">There are no categories.</li>
-            }
+<div class="content">
+    <select class="form-control catListing" id="simpleContained1Tab">
+        @foreach (var cat in Model.Categories)
+        {
+            <option value="@cat.CategoryName" id="@cat.CategoryId" @(Model.ThisBlog.Category.CategoryId == cat.CategoryId ? "selected" : "")>
+                @cat.CategoryName
+            </option>
         }
-    </ul>
+    </select>
 </div>

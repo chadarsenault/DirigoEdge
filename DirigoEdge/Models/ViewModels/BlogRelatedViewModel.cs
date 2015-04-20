@@ -33,15 +33,16 @@ namespace DirigoEdgeCore.Models.ViewModels
                 TheBlog = Context.Blogs.FirstOrDefault(x => x.Title == title);
             }
 
-            if (TheBlog != null && TheBlog.Tags != null)
+            if (TheBlog == null || TheBlog.Tags == null)
             {
-                List<string> tags = TheBlog.Tags.Split(',').ToList();
-                RelatedPosts = Context.Blogs.Where(x => x.BlogId != TheBlog.BlogId && tags.Contains(x.Tags) && x.MainCategory == TheBlog.MainCategory)
-                                .OrderByDescending(blog => blog.Date)
-                                .Take(MaxBlogCount)
-                                .ToList();
-
+                return;
             }
+
+           var relPosts  = Context.Blogs.Where(x => x.BlogId != TheBlog.BlogId && x.IsActive)
+                .OrderByDescending(blog => blog.Date).ToList();
+
+           relPosts.RemoveAll(posts => !posts.Tags.Intersect(TheBlog.Tags).Any() && posts.Category.CategoryId != TheBlog.Category.CategoryId);
+           RelatedPosts = relPosts.Take(5).ToList();
         }
     }
 }

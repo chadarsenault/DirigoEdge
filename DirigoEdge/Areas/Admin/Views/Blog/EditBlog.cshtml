@@ -20,7 +20,7 @@
                     <div class="blogTitle">
                         <input id="BlogTitle" class="required form-control" type="text" value="@Model.ThisBlog.Title" autocomplete=off />
                         <span class="permHint">Permalink: </span>
-                        <span>@Model.SiteUrl</span><span class="category-permalink">@ContentUtils.GetFormattedUrl(Model.ThisBlog.MainCategory)/</span><span id="PermaLinkEnd" data-modified="@permaLinkModded">@ContentUtils.GetFormattedUrl(Model.ThisBlog.PermaLink)</span><input id="PermaLinkEditPane" type="text" class="hide autogrow" /><span>/</span><a id="EditPermaLink" href="javascript:void(0);">edit</a>
+                        <span>@Model.SiteUrl</span><span class="category-permalink">@Model.ThisBlog.Category.CategoryNameFormatted/</span><span id="PermaLinkEnd" data-modified="@permaLinkModded">@ContentUtils.GetFormattedUrl(Model.ThisBlog.PermaLink)</span><input id="PermaLinkEditPane" type="text" class="hide autogrow" /><span>/</span><a id="EditPermaLink" href="javascript:void(0);">edit</a>
                     </div>
                    
                 </div>

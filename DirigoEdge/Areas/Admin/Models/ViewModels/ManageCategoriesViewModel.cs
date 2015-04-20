@@ -17,13 +17,12 @@ namespace DirigoEdge.Areas.Admin.Models.ViewModels
             BookmarkTitle = "Manage Categories";
             Totals = (from bc in Context.BlogCategories
                       select
-                          new BlogTotals()
+                          new BlogTotals
                           {
                               Category = bc.CategoryName,
-                              TotalPosts = Context.Blogs.Count(x => x.MainCategory == bc.CategoryName)
+                              TotalPosts = Context.Blogs.Count(x => x.Category == bc)
                           }).ToList();
         }
-
     }
 
     public class BlogTotals

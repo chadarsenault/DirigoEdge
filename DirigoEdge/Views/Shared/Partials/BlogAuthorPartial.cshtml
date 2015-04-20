@@ -12,11 +12,9 @@
             }
             
             @* Blog Author *@
-            var user = "Anonymous";
             var authorUrl = "#";
             if (Model.TheBlogUser != null)
             {
-                user = Model.TheBlogUser.Username;
                 authorUrl = Model.TheBlog.BlogAuthorUrl ?? "#";
             }
         }
@@ -25,7 +23,7 @@
         </div>
         
         <div class="authorTitle">
-            <h5>@user</h5>
+            <h5>@Model.TheBlog.BlogAuthor.DisplayName</h5>
         </div>
         <div class="authorSocial">
             @*== Facebook Like Button ==*@

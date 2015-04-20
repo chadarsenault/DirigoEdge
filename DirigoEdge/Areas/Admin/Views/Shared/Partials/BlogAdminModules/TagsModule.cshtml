@@ -3,7 +3,10 @@
 <h4>Tags</h4>
 
 <div class="content">
-    <input class=" form-control" id="BlogTags" type="text" placeholder="tags..." value="@Model.ThisBlog.Tags" />
+@{
+    String tags = @Model.ThisBlog.Tags.Aggregate("", (current, tag) => current + (tag.BlogTagName + ","));
+}
+    <input class=" form-control" id="BlogTags" type="text" placeholder="tags..." value="@tags"/>
     <em>Separate tags with commas</em>
     <h5>Common Tags</h5>
     <ul class="commonTags">

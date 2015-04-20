@@ -24,7 +24,7 @@ namespace DirigoEdgeCore.Models.ViewModels
             // Get back to the original name before url conversion
             BlogUsername = username.Replace(ContentGlobals.BLOGDELIMMETER, " ");
 
-            TheBlog = Context.Blogs.FirstOrDefault(x => x.Author == BlogUsername);
+            TheBlog = Context.Blogs.FirstOrDefault(x => x.BlogAuthor.Username == BlogUsername);
 
             // Get User based on authorid
             TheBlogUser = Context.BlogUsers.FirstOrDefault(x => x.Username == BlogUsername);

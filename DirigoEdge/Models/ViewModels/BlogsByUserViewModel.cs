@@ -33,7 +33,7 @@ namespace DirigoEdgeCore.Models.ViewModels
             SkipBlogs = MaxBlogCount;
             BlogTitle = model.GetBlogSettings().BlogTitle;
 
-            AllBlogs = Context.Blogs.Where(x => x.Author == BlogUsername && x.IsActive).ToList();
+            AllBlogs = Context.Blogs.Where(x => x.BlogAuthor.Username == BlogUsername && x.IsActive).ToList();
 
             BlogsByUser = AllBlogs
                         .OrderByDescending(blog => blog.Date)
@@ -41,7 +41,7 @@ namespace DirigoEdgeCore.Models.ViewModels
                         .ToList();
 
             // Try permalink first
-            TheBlog = BlogsByUser.FirstOrDefault(x => x.Author == BlogUsername);
+            TheBlog = BlogsByUser.FirstOrDefault(x => x.BlogAuthor.Username == BlogUsername);
 
         }
     }
