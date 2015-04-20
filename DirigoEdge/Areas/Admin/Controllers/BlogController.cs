@@ -53,9 +53,10 @@ namespace DirigoEdge.Areas.Admin.Controllers
         }
 
         [PermissionsFilter(Permissions = "Can Edit Blogs")]
-        public ActionResult EditBlog(string id)
+        public ActionResult EditBlog(string id, Boolean isNew = false)
         {
             var model = new EditBlogViewModel(id);
+            ViewBag.IsNew = isNew;
             return View(model);
         }
 
@@ -186,7 +187,7 @@ namespace DirigoEdge.Areas.Admin.Controllers
             blog.Title = blog.Title + " " + blogId;
             Context.SaveChanges();
 
-            return RedirectToAction("EditBlog", "Blog", new { id = blogId });
+            return RedirectToAction("EditBlog", "Blog", new { id = blogId, isNew = true });
         }
 
         public class EditBlogModel

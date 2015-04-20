@@ -238,13 +238,15 @@ blog_class.prototype.addBlogEvents = function() {
     var self = this;
 
     // Set blog title permalink hint on keypress
-    $("#BlogTitle").keyup(function() {
+    $("#BlogTitle").keyup(function () {
+        
         // Only update permalink if it hasn't been touched yet
         var permLinkModified = $("#PermaLinkEnd").attr("data-modified").toLowerCase() == "true";
         if (!permLinkModified) {
+            console.log('fie')
             var val = $(this).val();
             val = val.replace(/ /g, self.blogSpaceReplacementChar);
-            $("#PermaLinkEditPane").text(val);
+            $("#PermaLinkEnd").text(val);
         }
     });
 
@@ -265,7 +267,7 @@ blog_class.prototype.addBlogEvents = function() {
     $("#SaveBlog").click(function() {
         var content = CKEDITOR.instances.CKEDITBLOG.getData();
         var featText = CKEDITOR.instances.ShortDescription.getData();
-
+        $("#PermaLinkEnd").attr("data-modified", "true")
         var data = {
             entity: {
                 Title: $("#BlogTitle").val(),

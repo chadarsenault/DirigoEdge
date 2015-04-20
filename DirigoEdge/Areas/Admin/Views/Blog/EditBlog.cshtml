@@ -15,7 +15,7 @@
                 <div class="col-lg-12">
                     <h3><i class="fa fa-pencil"></i> Edit Post @Html.Partial("Partials/BookmarkButtonPartial")</h3>
                     @{
-                        string permaLinkModded = !String.IsNullOrEmpty(@Model.ThisBlog.PermaLink) ? "True" : "False";
+                        string permaLinkModded = !@ViewBag.IsNew ? "True" : "False";
                     }
                     <div class="blogTitle">
                         <input id="BlogTitle" class="required form-control" type="text" value="@Model.ThisBlog.Title" autocomplete=off />
